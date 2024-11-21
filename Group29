@@ -156,10 +156,35 @@ class Generate_Schedule:
     def create_schedule(self): #randomly assigns person to day in calendar
         shifts = ["7:00AM - 1:00PM", "1:00PM - 7:00PM"]
         days_in_month = calendar.monthrange(self.year, self.month)[1]
+
         schedule = {}
-        for day in range(1, days_in_month + 1):
-            schedule[day] = {shifts[0]: random.choice(self.people), shifts[1]: random.choice(self.people)}
-        return schedule
+        
+        for shift in final_schedule:
+            m_shift = final_schedule[shift]["7:00AM - 1:00PM"]
+            if m_shift == "available" or m_shift == "preferred":
+                for day in range(1, days_in_month + 1):
+                    schedule[day] = {shifts[0]: random.choice(self.people), shifts[1]: random.choice(self.people)}
+                return schedule
+            elif m_shift == "NA":
+                self.people.remove(self.name)
+                for day in range(1, days_in_month + 1):
+                    schedule[day] = {shifts[0]: random.choice(self.people), shifts[1]: random.choice(self.people)}
+                return schedule
+            else:
+                pass
+                
+            a_shift = final_schedule[shift]["1:00PM - 7:00PM"]
+            if a_shift == "available" or m_shift == "preferred":
+                for day in range(1, days_in_month + 1):
+                    schedule[day] = {shifts[0]: random.choice(self.people), shifts[1]: random.choice(self.people)}
+                return schedule
+            elif a_shift == "NA":
+                self.people.remove(self.name)
+                for day in range(1, days_in_month + 1):
+                    schedule[day] = {shifts[0]: random.choice(self.people), shifts[1]: random.choice(self.people)}
+                return schedule
+            else:
+                pass
            
 class Show_Schedule: #creates HTML calendar
     def __init__(self, schedule, year, month):
