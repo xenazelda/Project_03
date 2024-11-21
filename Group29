@@ -1,7 +1,7 @@
 import calendar
 import random
 
-#CREATES AVAILABILITY SCHEDULE FOR EACH INDIVIDUAL EMPLOYEE#
+#CREATES AVAILABILITY SCHEDULE FOR EACH INDIVIDUAL EMPLOYEE
 class Caregiver:
     def schedule_for_caregiver(self):
         global schedule
@@ -114,39 +114,16 @@ if __name__ == "__main__":
     print("\nYou can set your availability for each shift (7:00AM - 1:00PM and 1:00PM - 7:00PM).")
     print("You have three options for availability: 'preferred', 'available', and 'unavailable (NA)'.")
 
-    # Step 1: Create a default schedule
+    #Create a default schedule
     caregiver_schedule = Caregiver()
     final_schedule = caregiver_schedule.schedule_for_caregiver()
     
-    # Step 3: Display the schedule as an HTML calendar
+    #Display the schedule as an HTML calendar
     updated_schedule = Caregiver_Schedule("John", 4107295872, "john@gmail.com", 20, 5) #example input from a caregiver
     updated_schedule.display_schedule_as_html(final_schedule)
 
-print(final_schedule)
-
-#NEEDS WORK:
-for shift in final_schedule:
-    m_shift = final_schedule[shift]["7:00AM - 1:00PM"]
-    if m_shift == "available" or m_shift == "preferred":
-        #continue scheduling
-    elif m_shift == "NA":
-        people.remove("John")
-    else:
-        pass
-    #restart code here
-    a_shift = final_schedule[shift]["1:00PM - 7:00PM"]
-    if a_shift == "available" or m_shift == "preferred":
-        #continuing scheduling
-    elif a_shift == "NA":
-        people.remove("John")
-    else:
-        pass
-    #restart code here
 
 #CREATES FINAL SCHEDULE FOR ALL EMPLOYEES:
-import calendar
-import random
-
 class Generate_Schedule:
     def __init__(self, people, year, month):
         self.people = people
@@ -161,7 +138,7 @@ class Generate_Schedule:
         
         for shift in final_schedule:
             m_shift = final_schedule[shift]["7:00AM - 1:00PM"]
-            if m_shift == "available" or m_shift == "preferred":
+            if m_shift == "available" or m_shift == "preferred": #assigning based off morning shift input
                 for day in range(1, days_in_month + 1):
                     schedule[day] = {shifts[0]: random.choice(self.people), shifts[1]: random.choice(self.people)}
                 return schedule
@@ -174,7 +151,7 @@ class Generate_Schedule:
                 pass
                 
             a_shift = final_schedule[shift]["1:00PM - 7:00PM"]
-            if a_shift == "available" or m_shift == "preferred":
+            if a_shift == "available" or m_shift == "preferred": #assigning based off afternoon shift input
                 for day in range(1, days_in_month + 1):
                     schedule[day] = {shifts[0]: random.choice(self.people), shifts[1]: random.choice(self.people)}
                 return schedule
