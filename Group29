@@ -38,13 +38,16 @@ class Caregiver_Schedule(Caregiver): #creates attributes for individual caregive
         self.payrate = payrate
         self.hours = hours
     
-      def calculate_weekly_pay(self): #calculates pay for caregiver (weekly)
-        weekly_salary = (self.hours * self.payrate)/4
+   def calculate_weekly_pay(self): #calculates pay for caregiver (weekly)
+        weekly_salary = self.hours * self.payrate
         return weekly_salary
         
     def calculate_monthly_pay(self): #calculates pay for caregiver (monthly)
-        monthly_salary = self.hours * self.payrate
-        return monthly_salary
+        # find the annual pay
+        gross_pay = self.calculate_weekly_pay() * 52
+        # divide the annual pay by 12 to find the monthly pay
+        monthly_pay = gross_pay/12
+        return monthly_pay
     
     def display_schedule_as_html(self, final_schedule): # Create the HTML structure
         html_schedule = """
