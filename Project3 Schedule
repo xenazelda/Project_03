@@ -126,43 +126,32 @@ if __name__ == "__main__":
 #CREATES FINAL SCHEDULE FOR ALL EMPLOYEES:
 class Generate_Schedule:
     def __init__(self, people, year, month):
-        self.people = people
         self.year = year
         self.month = month
+        self.schedule = {}
         
-    def create_schedule(self): #randomly assigns person to day in calendar
-        shifts = ["7:00AM - 1:00PM", "1:00PM - 7:00PM"]
+    def create_schedule(self, caregivers):
         days_in_month = calendar.monthrange(self.year, self.month)[1]
+        shifts = ["7:00AM - 1:00PM", "1:00PM - 7:00PM"]
 
-        schedule = {}
-        
-        for shift in final_schedule:
-            m_shift = final_schedule[shift]["7:00AM - 1:00PM"]
-            if m_shift == "available" or m_shift == "preferred": #assigning based off morning shift input
-                for day in range(1, days_in_month + 1):
-                    schedule[day] = {shifts[0]: random.choice(self.people), shifts[1]: random.choice(self.people)}
-                return schedule
-            elif m_shift == "NA":
-                self.people.remove(self.name)
-                for day in range(1, days_in_month + 1):
-                    schedule[day] = {shifts[0]: random.choice(self.people), shifts[1]: random.choice(self.people)}
-                return schedule
-            else:
-                pass
-                
-            a_shift = final_schedule[shift]["1:00PM - 7:00PM"]
-            if a_shift == "available" or m_shift == "preferred": #assigning based off afternoon shift input
-                for day in range(1, days_in_month + 1):
-                    schedule[day] = {shifts[0]: random.choice(self.people), shifts[1]: random.choice(self.people)}
-                return schedule
-            elif a_shift == "NA":
-                self.people.remove(self.name)
-                for day in range(1, days_in_month + 1):
-                    schedule[day] = {shifts[0]: random.choice(self.people), shifts[1]: random.choice(self.people)}
-                return schedule
-            else:
-                pass
-           
+        for day in range(1, days_in_month + 1):
+            self.schedule[day] = {shift: [] for shift in shifts}
+
+        for caregiver in caregivers:
+            individual_schedule = caregiver["availability"]
+            name = caregiver ["name"]
+
+            for day in range(1, days_in_month + 1):
+                weekly_day = (day - 1) % 7 + 1
+                for shift in shifts:
+                    if individual_schedule[weekly_day][shift] in ["available", "preferred"]:
+                        self.schedule[day][shift].append(name)
+                    elif indiviudal_schedule[weekly_day][shift] == "NA":
+                        if name in self.schedule[day][shift]:
+                            self.schedule[day][shift].remove(name)
+
+        return self.schedule
+
 class Show_Schedule: #creates HTML calendar
     def __init__(self, schedule, year, month):
         self.schedule = schedule
