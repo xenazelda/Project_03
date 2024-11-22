@@ -103,13 +103,13 @@ class Caregiver_Schedule(Caregiver): #creates attributes for individual caregive
         """
         with open(f"availability_schedule_{self.name}.html", "w") as file: #writes HTML as file and also includes attribute for specific caregiver
             file.write(html_schedule)
-            file.write(f"Caregiver: {self.name}.")
-            file.write(f"Phone Number: {self.phone}.")
-            file.write(f"Email: {self.email}.")
-            file.write(f"Payrate: {self.payrate}.")
-            file.write(f"Hours: {self.hours}.")
-            file.write(f"Weekly Pay: ${Caregiver_Schedule.calculate_weekly_pay(self):.2f}")
-            file.write(f"Monthly Pay: ${Caregiver_Schedule.calculate_monthly_pay(self):.2f}")
+            file.write(f"Caregiver: {self.name}")
+            file.write(f" Phone Number: {self.phone}")
+            file.write(f" Email: {self.email}")
+            file.write(f" Payrate: ${self.payrate}:.2f")
+            file.write(f" Hours: {self.hours}")
+            file.write(f" Weekly Pay: ${Caregiver_Schedule.calculate_weekly_pay(self)}:.2f")
+            file.write(f" Monthly Pay: ${Caregiver_Schedule.calculate_monthly_pay(self)}:.2f")
         
         print("HTML availability schedule generated successfully!")
 
