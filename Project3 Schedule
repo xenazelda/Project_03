@@ -38,7 +38,7 @@ class Caregiver_Schedule(Caregiver): #creates attributes for individual caregive
         self.payrate = payrate
         self.hours = hours
     
-      def calculate_weekly_pay(self): #calculates pay for caregiver (weekly)
+    def calculate_weekly_pay(self): #calculates pay for caregiver (weekly)
         weekly_salary = (self.hours * self.payrate)/4
         return weekly_salary
         
