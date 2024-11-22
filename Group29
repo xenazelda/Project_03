@@ -38,7 +38,7 @@ class Caregiver_Schedule(Caregiver): #creates attributes for individual caregive
         self.payrate = payrate
         self.hours = hours
     
-   def calculate_weekly_pay(self): #calculates pay for caregiver (weekly)
+    def calculate_weekly_pay(self): #calculates pay for caregiver (weekly)
         weekly_salary = self.hours * self.payrate
         return weekly_salary
         
@@ -108,6 +108,8 @@ class Caregiver_Schedule(Caregiver): #creates attributes for individual caregive
             file.write(f"Email: {self.email}.")
             file.write(f"Payrate: {self.payrate}.")
             file.write(f"Hours: {self.hours}.")
+            file.write(f"Weekly Pay: ${Caregiver_Schedule.calculate_weekly_pay(self):.2f}")
+            file.write(f"Monthly Pay: ${Caregiver_Schedule.calculate_monthly_pay(self):.2f}")
         
         print("HTML availability schedule generated successfully!")
 
