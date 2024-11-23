@@ -226,21 +226,16 @@ class Show_Schedule:
         
         print(f"The HTML work schedule for {calendar.month_name[self.month]} {self.year} has been created."
 
-    def calculate_weekly_pay(self):
-        with open(f"work_schedule_{self.year}_{self.month}.html", "r") as file:
-            contents = file.read()
-            worker_shift = contents.count(self.name)
-            weekly_salary = (20 * worker_shift)/4
-            with open(f"weekly_salary_{self.name}.html", "w") as f:
-                f.write(str(weekly_salary))
-        
-    def calculate_monthly_pay(self):
-        with open(f"work_schedule_{self.year}_{self.month}.html", "r") as file:
-            contents = file.read()
-            worker_shift = contents.count(self.name)
-            monthly_salary = (20 * worker_shift)
-            with open(f"monthly_salary_{self.name}.html", "w") as f:
-                f.write(str(monthly_salary))
+    def calculate_weekly_and_monthly_pay(self):
+        for person in people:
+            with open(f"work_schedule_{self.year}_{self.month}.html", "r") as file: 
+                contents = file.read()
+                worker_shift = contents.count(person)
+                weekly_salary = (20 * worker_shift)/4
+                monthly_salary = (20 * worker_shift)
+                with open(f"weekly_salary_{self.name}.html", "w") as f:
+                    f.write(f"Weekly salary for {person}: {weekly_salary}.")
+                    f.write(f"Monthly salary for {person}: {monthly_salary}.")
 
 # Sample list of people to assign
 people = ["Alice", "Bob", "Charlie", "John", "Eve", "Frank", "Grace"]
@@ -258,5 +253,4 @@ show_schedule = Show_Schedule(final_schedule, year_entry, month_entry)
 show_schedule.display_schedule_html()
 
 #creates weekly and monthly pay files for individual caregiver
-show_schedule.calculate_weekly_pay()
-show_schedule.calculate_monthly_pay()
+show_schedule.calculate_weekly_and_monthly_pay()
