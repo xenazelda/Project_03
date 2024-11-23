@@ -39,13 +39,19 @@ class Caregiver_Schedule(Caregiver):
         self.hours = hours
     
       def calculate_weekly_pay(self):
-        weekly_salary = (self.hours * self.payrate)/4
-        return weekly_salary
+        with open(f"work_schedule_{self.year}_{self.month}.html", "w") as file:
+            contents = file.read()
+            worker_shift = contents.count(self.name)
+            weekly_salary = (self.hours * worker_shift)/4
+            return weekly_salary
         
     def calculate_monthly_pay(self):
-        monthly_salary = self.hours * self.payrate
-        return monthly_salary
-    
+        with open(f"work_schedule_{self.year}_{self.month}.html", "w") as file:
+            contents = file.read()
+            worker_shift = contents.count(self.name)
+            monthly_salary = (self.hours * worker_shift)
+            return monthly_salary
+
     def display_schedule_as_html(self, final_schedule):
         # Create the HTML structure
         html_schedule = """
