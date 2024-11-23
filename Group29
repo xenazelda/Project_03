@@ -37,20 +37,6 @@ class Caregiver_Schedule(Caregiver):
         self.email = email
         self.payrate = payrate
         self.hours = hours
-    
-      def calculate_weekly_pay(self):
-        with open(f"work_schedule_{self.year}_{self.month}.html", "w") as file:
-            contents = file.read()
-            worker_shift = contents.count(self.name)
-            weekly_salary = (self.hours * worker_shift)/4
-            return weekly_salary
-        
-    def calculate_monthly_pay(self):
-        with open(f"work_schedule_{self.year}_{self.month}.html", "w") as file:
-            contents = file.read()
-            worker_shift = contents.count(self.name)
-            monthly_salary = (self.hours * worker_shift)
-            return monthly_salary
 
     def display_schedule_as_html(self, final_schedule):
         # Create the HTML structure
@@ -237,9 +223,24 @@ class Show_Schedule:
             
         with open(f"work_schedule_{self.year}_{self.month}.html", "w") as file:
             file.write(html_schedule)
-    
-        print(f"The HTML work schedule for {calendar.month_name[self.month]} {self.year} has been created.")
+        
+        print(f"The HTML work schedule for {calendar.month_name[self.month]} {self.year} has been created."
 
+    def calculate_weekly_pay(self):
+        with open(f"work_schedule_{self.year}_{self.month}.html", "r") as file:
+            contents = file.read()
+            worker_shift = contents.count(self.name)
+            weekly_salary = (20 * worker_shift)/4
+            with open(f"weekly_salary_{self.name}.html", "w") as f:
+                f.write(str(weekly_salary))
+        
+    def calculate_monthly_pay(self):
+        with open(f"work_schedule_{self.year}_{self.month}.html", "r") as file:
+            contents = file.read()
+            worker_shift = contents.count(self.name)
+            monthly_salary = (20 * worker_shift)
+            with open(f"monthly_salary_{self.name}.html", "w") as f:
+                f.write(str(monthly_salary))
 
 # Sample list of people to assign
 people = ["Alice", "Bob", "Charlie", "John", "Eve", "Frank", "Grace"]
@@ -256,5 +257,6 @@ final_schedule = schedule.create_schedule()
 show_schedule = Show_Schedule(final_schedule, year_entry, month_entry)
 show_schedule.display_schedule_html()
 
-
-
+#creates weekly and monthly pay files for individual caregiver
+show_schedule.calculate_weekly_pay()
+show_schedule.calculate_monthly_pay()
