@@ -1,184 +1,57 @@
 import calendar
 import random
 
-#CREATES AVAILABILITY SCHEDULE FOR EACH INDIVIDUAL EMPLOYEE
+# creates availability schedule for each individual employee
 class Caregiver:
-    def schedule_for_caregiver(self):
-        global schedule
+    def __init__(self, name):
+        self.name = name
+
+    def schedule_for_caregiver(self):  # Indented and properly included in the class
         schedule = {}
-        for day in range(1, 8):
+        for day in range(1, 8):  # establishes availability each day of the week
             schedule[day] = {"7:00AM - 1:00PM": "available",
-                            "1:00PM - 7:00PM": "available"}
-    
+                             "1:00PM - 7:00PM": "available"}
+
         for day in range(1, 8):
-            name_of_day = list(calendar.day_name)  #retrieves name of days
-            print(f"\nAvailability for {name_of_day[day - 1]}")
-            
-            # Gets availability for morning shift
-            morning_shift = input("Morning shift (7:00AM - 1:00PM): Enter 'preferred', 'available', or 'NA': ").strip()
-            if morning_shift == "available" or "preferred" or "NA":
-                schedule[day]["7:00AM - 1:00PM"] = morning_shift
-            else:
-                schedule[day]["7:00AM - 1:00PM"] = "available"
-  
-            # Get availability for afternoon shift
-            afternoon_shift = input("Afternoon shift (1:00PM - 7:00PM): Enter 'preferred', 'available', or 'NA': ").strip()
-            if afternoon_shift == "available" or "preferred" or "NA":
-                schedule[day]["1:00PM - 7:00PM"] = afternoon_shift
-            else:
-                schedule[day]["7:00AM - 1:00PM"] = "available"
+            name_of_day = list(calendar.day_name)
+            print(f"\nAvailability for {name_of_day[day - 1]} for {self.name}")
+
+            # user inputs morning shift availability
+            morning_shift = input(
+                "Morning shift (7:00AM - 1:00PM): Enter 'preferred', 'available', or 'NA': ").strip().lower()
+            while morning_shift not in ["preferred", "available", "na"]:  # input validation added
+                morning_shift = input("Invalid input. Please enter 'preferred', 'available', or 'NA': ").strip().lower()
+            schedule[day]["7:00AM - 1:00PM"] = morning_shift
+
+            # user inputs afternoon shift availability
+            afternoon_shift = input(
+                "Afternoon shift (1:00PM - 7:00PM): Enter 'preferred', 'available', or 'NA': ").strip().lower()
+            while afternoon_shift not in ["preferred", "available", "na"]:  # input validation added
+                afternoon_shift = input("Invalid input. Please enter 'preferred', 'available', or 'NA': ").strip().lower()
+            schedule[day]["1:00PM - 7:00PM"] = afternoon_shift
 
         return schedule
-    
-class Caregiver_Schedule(Caregiver): #creates attributes for individual caregiver
-    def __init__(self, name, phone, email, payrate, hours):
-        self.name = name
+
+
+class Caregiver_Schedule(Caregiver):  # creates attributes for individual caregiver
+    def __init__(self, name, phone, email, payrate):
+        super().__init__(name)
         self.phone = phone
         self.email = email
         self.payrate = payrate
-        self.hours = hours
-    
-    def calculate_weekly_pay(self): #calculates pay for caregiver (weekly)
-        weekly_salary = self.hours * self.payrate
-        return weekly_salary
-        
-    def calculate_monthly_pay(self): #calculates pay for caregiver (monthly)
-        # find the annual pay
-        gross_pay = self.calculate_weekly_pay() * 52
-        # divide the annual pay by 12 to find the monthly pay
-        monthly_pay = gross_pay/12
-        return monthly_pay
-    
-    def display_schedule_as_html(self, final_schedule): # Create the HTML structure
-        html_schedule = """
-        <html>
-        <head>
-            <title>Caregiver Availability Schedule</title>
-            <style>
-                table {
-                    border-collapse: collapse;
-                    width: 100%;
-                    margin: 20px 0;
-                }
-                th, td {
-                    border: 1px solid black;
-                    padding: 10px;
-                    text-align: center;
-                }
-                th {
-                    background-color: #f2f2f2;
-                }
-                td {
-                    height: 100px;
-                    vertical-align: top;
-                }
-            </style>
-        </head>
-        <body>
-            <h1>Caregiver Availability Schedule</h1>
-            <table>
-                <tr>
-                    <th>Mon</th>
-                    <th>Tue</th>
-                    <th>Wed</th>
-                    <th>Thu</th>
-                    <th>Fri</th>
-                    <th>Sat</th>
-                    <th>Sun</th>
-                </tr>
-        """
-    
-        name_of_day = list(calendar.day_name) #gets the days of the week
-    
-        for day in range(1, 8): #fills in the schedule
-            morning_shift = schedule[day]["7:00AM - 1:00PM"]
-            afternoon_shift = schedule[day]["1:00PM - 7:00PM"]
-            html_schedule += f"<td><b>Morning(7am-1pm):</b> {morning_shift}<br><b>Afternoon(1pm-7pm):</b> {afternoon_shift}</td>"
-        
-        html_schedule += """  #closes the table and HTML
-            </tr>
-            </table>
-        </body>
-        </html>
-        """
-        with open(f"availability_schedule_{self.name}.html", "w") as file: #writes HTML as file and also includes attribute for specific caregiver
-            file.write(html_schedule)
-            file.write(f"Caregiver: {self.name}")
-            file.write(f" Phone Number: {self.phone}")
-            file.write(f" Email: {self.email}")
-            file.write(f" Payrate: ${self.payrate:.2f}")
-            file.write(f" Hours: {self.hours}")
-            file.write(f" Weekly Pay: ${Caregiver_Schedule.calculate_weekly_pay(self):.2f}")
-            file.write(f" Monthly Pay: ${Caregiver_Schedule.calculate_monthly_pay(self):.2f}")
-        
-        print("HTML availability schedule generated successfully!")
+        self.hours_worked = 0  # tracks total hours worked for caregiver
 
-if __name__ == "__main__":
-    print("Welcome to the Shift Availability Scheduler")
+    def calculate_weekly_pay(self):  # calculates pay for caregiver (weekly)
+        return self.hours_worked * self.payrate
 
-    print("\nYou can set your availability for each shift (7:00AM - 1:00PM and 1:00PM - 7:00PM).")
-    print("You have three options for availability: 'preferred', 'available', and 'unavailable (NA)'.")
+    def calculate_monthly_pay(self):  # calculates pay for caregiver (monthly)
+        return self.calculate_weekly_pay() * 4
 
-    #Create a default schedule
-    caregiver_schedule = Caregiver()
-    final_schedule = caregiver_schedule.schedule_for_caregiver()
-    
-    #Display the schedule as an HTML calendar
-    updated_schedule = Caregiver_Schedule("John", 4107295872, "john@gmail.com", 20, 5) #example input from a caregiver
-    updated_schedule.display_schedule_as_html(final_schedule)
-
-
-#CREATES FINAL SCHEDULE FOR ALL EMPLOYEES:
-class Generate_Schedule:
-    def __init__(self, people, year, month):
-        self.people = people
-        self.year = year
-        self.month = month
-        
-    def create_schedule(self): #randomly assigns person to day in calendar
-        shifts = ["7:00AM - 1:00PM", "1:00PM - 7:00PM"]
-        days_in_month = calendar.monthrange(self.year, self.month)[1]
-
-        schedule = {}
-        
-        for shift in final_schedule:
-            m_shift = final_schedule[shift]["7:00AM - 1:00PM"]
-            if m_shift == "available" or m_shift == "preferred": #assigning based off morning shift input
-                for day in range(1, days_in_month + 1):
-                    schedule[day] = {shifts[0]: random.choice(self.people), shifts[1]: random.choice(self.people)}
-                return schedule
-            elif m_shift == "NA":
-                self.people.remove(self.name)
-                for day in range(1, days_in_month + 1):
-                    schedule[day] = {shifts[0]: random.choice(self.people), shifts[1]: random.choice(self.people)}
-                return schedule
-            else:
-                pass
-                
-            a_shift = final_schedule[shift]["1:00PM - 7:00PM"]
-            if a_shift == "available" or m_shift == "preferred": #assigning based off afternoon shift input
-                for day in range(1, days_in_month + 1):
-                    schedule[day] = {shifts[0]: random.choice(self.people), shifts[1]: random.choice(self.people)}
-                return schedule
-            elif a_shift == "NA":
-                self.people.remove(self.name)
-                for day in range(1, days_in_month + 1):
-                    schedule[day] = {shifts[0]: random.choice(self.people), shifts[1]: random.choice(self.people)}
-                return schedule
-            else:
-                pass
-           
-class Show_Schedule: #creates HTML calendar
-    def __init__(self, schedule, year, month):
-        self.schedule = schedule
-        self.year = year
-        self.month = month
-        
-    def display_schedule_html(self):  
+    def display_schedule_as_html(self, final_schedule):
         html_schedule = f"""
         <html>
         <head>
-            <title>Work Schedule for {calendar.month_name[self.month]} {self.year}</title>
+            <title>Availability Schedule for {self.name}</title>
             <style>
                 table {{
                     border-collapse: collapse;
@@ -200,7 +73,7 @@ class Show_Schedule: #creates HTML calendar
             </style>
         </head>
         <body>
-            <h1>Work Schedule for {calendar.month_name[self.month]} {self.year}</h1>
+            <h1>Caregiver Availability Schedule</h1>
             <table>
                 <tr>
                     <th>Mon</th>
@@ -211,44 +84,103 @@ class Show_Schedule: #creates HTML calendar
                     <th>Sat</th>
                     <th>Sun</th>
                 </tr>
+                <tr>
         """
-        first_weekday, days_in_month = calendar.monthrange(self.year, self.month)
 
-        present_day = 1
-        for week in range((days_in_month + first_weekday) // 7 + 1):
-            html_schedule += "<tr>"
-            for day in range(7):
-                if (week == 0 and day < first_weekday) or present_day > days_in_month:
-                    html_schedule += "<td></td>"  #empty cell for days outside the month
-                else:
-                    # Add the day and the assigned shifts
-                    shifts_for_the_day = final_schedule.get(present_day, {})
-                    morning_shift = shifts_for_the_day.get("7:00AM - 1:00PM", "N/A")
-                    afternoon_shift = shifts_for_the_day.get("1:00PM - 7:00PM", "N/A")
-    
-                    html_schedule += f"<td>{present_day}<br><b>AM:</b> {morning_shift}<br><b>PM:</b> {afternoon_shift}</td>"
-                    present_day += 1
-        html_schedule += "</tr>"
-            
-        with open(f"work_schedule_{self.year}_{self.month}.html", "w") as file:
+        for day in range(1, 8):  
+            morning_shift = final_schedule[day]["7:00AM - 1:00PM"]
+            afternoon_shift = final_schedule[day]["1:00PM - 7:00PM"]
+            html_schedule += f"<td><b>Morning(7am-1pm):</b> {morning_shift}<br><b>Afternoon(1pm-7pm):</b> {afternoon_shift}</td>"
+
+        html_schedule += f"""
+                </tr>
+            </table>
+            <p><b>Name:</b> {self.name}</p>
+            <p><b>Phone:</b> {self.phone}</p>
+            <p><b>Email:</b> {self.email}</p>
+            <p><b>Payrate:</b> ${self.payrate:.2f}/hr</p>
+            <p><b>Hours Worked:</b> {self.hours_worked} hours</p>
+            <p><b>Weekly Pay:</b> ${self.calculate_weekly_pay():.2f}</p>
+            <p><b>Monthly Pay:</b> ${self.calculate_monthly_pay():.2f}</p>
+        </body>
+        </html>
+        """
+
+        with open(f"availability_schedule_{self.name}.html", "w") as file:
             file.write(html_schedule)
-    
-        print(f"The HTML work schedule for {calendar.month_name[self.month]} {self.year} has been created.")
+        print(f"Availability schedule generated for {self.name}.")
 
 
-#list of caregivers
-people = ["Alice", "Bob", "Charlie", "John", "Eve", "Frank", "Grace"]
+class Generate_Schedule:  # creates schedule for all employees
+    def __init__(self, year, month):
+        self.year = year
+        self.month = month
+        self.schedule = {}
 
-#user input for the year and month from each individual caregiver
-year_entry = int(input("Enter the year: "))
-month_entry = int(input("Enter the month (1-12): "))
+    def create_schedule(self, caregivers):  # randomly assigns person to shifts
+        days_in_month = calendar.monthrange(self.year, self.month)[1]
+        shifts = ["7:00AM - 1:00PM", "1:00PM - 7:00PM"]
 
-#generates the work schedule
-schedule = Generate_Schedule(people, year_entry, month_entry)
-final_schedule = schedule.create_schedule()
+        # initializes schedule
+        for day in range(1, days_in_month + 1):
+            self.schedule[day] = {shift: None for shift in shifts}
 
-#displays the schedule as an HTML calendar
-show_schedule = Show_Schedule(final_schedule, year_entry, month_entry)
-show_schedule.display_schedule_html()
+        # assigns caregivers to shifts
+        for day in range(1, days_in_month + 1):
+            for shift in shifts:
+                available_caregivers = [caregiver for caregiver in caregivers]
+                if available_caregivers:
+                    assigned_caregiver = random.choice(available_caregivers)
+                    self.schedule[day][shift] = assigned_caregiver.name
+                    assigned_caregiver.hours_worked += 6  # adds 6 hours for each assigned shift
+
+        return self.schedule
 
 
+if __name__ == "__main__":
+    print("Welcome to the Shift Availability Scheduler")
+
+    print("\nYou can set your availability for each shift (7:00AM - 1:00PM and 1:00PM - 7:00PM).")
+    print("You have three options for availability: 'preferred', 'available', and 'unavailable (NA)'.")
+
+    # list of caregivers details
+    caregivers = []
+    caregiver_details = [
+        {"name": "Alice", "phone number": "123-456-7890", "email": "alice@gmail.com", "payrate": 20},
+        {"name": "Bob", "phone number": "123-456-7890", "email": "bob@gmail.com", "payrate": 20},
+        {"name": "Charlie", "phone number": "123-456-7890", "email": "charlie@gmail.com", "payrate": 20},
+        {"name": "David", "phone number": "123-456-7890", "email": "david@gmail.com", "payrate": 20},
+        {"name": "Eve", "phone number": "123-456-7890", "email": "eve@gmail.com", "payrate": 20},
+        {"name": "Frank", "phone number": "123-456-7890", "email": "frank@gmail.com", "payrate": 20},
+        {"name": "Grace", "phone number": "123-456-7890", "email": "grace@gmail.com", "payrate": 20},
+        {"name": "John", "phone number": "123-456-7890", "email": "john@gmail.com", "payrate": 20}
+    ]
+
+    for details in caregiver_details:
+        caregiver = Caregiver_Schedule(details["name"], details["phone number"], details["email"], details["payrate"])
+        print(f"\nSetting availability for {caregiver.name}:")
+        availability = caregiver.schedule_for_caregiver()
+        caregiver.display_schedule_as_html(availability)
+        caregivers.append(caregiver)
+
+    # input validation for both year and month
+    while True:
+        try:
+            year = int(input("\nEnter the year for the schedule: "))
+            break
+        except ValueError:
+            print("Invalid. Please enter a number")
+            
+    while True:
+        try:
+            month = int(input("Enter the month (1-12): "))
+            if month < 1 or month > 12: 
+                print("Invalid. Please enter a number between 1 and 12")
+                continue
+            break
+        except ValueError:
+            print("Invalid. Please enter a number")
+
+    # generates schedule based on availability
+    schedule_generator = Generate_Schedule(year, month)
+    final_schedule = schedule_generator.create_schedule(caregivers)
