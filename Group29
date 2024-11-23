@@ -97,9 +97,6 @@ class Caregiver_Schedule(Caregiver):  # creates attributes for individual caregi
             <p><b>Phone:</b> {self.phone}</p>
             <p><b>Email:</b> {self.email}</p>
             <p><b>Payrate:</b> ${self.payrate:.2f}/hr</p>
-            <p><b>Hours Worked:</b> {self.hours_worked} hours</p>
-            <p><b>Weekly Pay:</b> ${self.calculate_weekly_pay():.2f}</p>
-            <p><b>Monthly Pay:</b> ${self.calculate_monthly_pay():.2f}</p>
         </body>
         </html>
         """
