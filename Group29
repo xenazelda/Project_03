@@ -16,13 +16,13 @@ class Caregiver:
             name_of_day = list(calendar.day_name)
             print(f"\nAvailability for {name_of_day[day - 1]} for {self.name}")
 
-            # Gets availability for morning shift
+            # gets availability for morning shift
             morning_shift = input("Morning shift (7:00AM - 1:00PM): Enter 'preferred', 'available', or 'NA': ").strip().lower()
             while morning_shift not in ["preferred", "available", "na"]:
                 morning_shift = input("Your input was invalid, please choose between 'preferred', 'available', or 'NA': ").strip().lower()
             schedule[day]["7:00AM - 1:00PM"] = morning_shift
 
-            # Get availability for afternoon shift
+            # gets availability for afternoon shift
             afternoon_shift = input("Afternoon shift (1:00PM - 7:00PM): Enter 'preferred', 'available', or 'NA': ").strip().lower()
             while afternoon_shift not in ["preferred", "available", "na"]:
                 afternoon_shift = input("Your input was invalid, please choose between 'preferred', 'available', or 'NA': ").strip().lower()
