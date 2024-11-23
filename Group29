@@ -262,6 +262,7 @@ if __name__ == "__main__":
             worker_shift = contents.count(first_value)
             weekly_salary = str((20 * worker_shift)/4)
             monthly_salary = str((20 * worker_shift))
-            with open(f"salary_{first_value}.html", "w") as f:
-                f.write(f"Weekly salary: {weekly_salary}.")
-                f.write(f"Monthly salary: {monthly_salary}.")
+            with open(f"salary_{first_value}.txt", "w") as f:
+                f.write(f"Pay Report for {first_value}: \n")
+                f.write(f"Weekly salary: ${weekly_salary}.\n")
+                f.write(f"Monthly salary: ${monthly_salary}.")
