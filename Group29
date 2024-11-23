@@ -254,3 +254,14 @@ if __name__ == "__main__":
     # displays the overall work schedule as an HTML calendar
     show_schedule = Show_Schedule(final_schedule, year, month)
     show_schedule.display_schedule_html()
+
+    for dictionary in caregiver_details:
+        first_value = next(iter(dictionary.values()))
+        with open(f"work_schedule_{year}_{month}.html", "r") as file:
+            contents = file.read()
+            worker_shift = contents.count(first_value)
+            weekly_salary = str((20 * worker_shift)/4)
+            monthly_salary = str((20 * worker_shift))
+            with open(f"salary_{first_value}.html", "w") as f:
+                f.write(f"Weekly salary: {weekly_salary}.")
+                f.write(f"Monthly salary: {monthly_salary}.")
