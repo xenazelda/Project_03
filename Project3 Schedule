@@ -6,30 +6,29 @@ class Caregiver:
     def __init__(self, name):
         self.name = name
 
-    def schedule_for_caregiver(self):
-        global schedule
+    def schedule_for_caregiver(self):  # Indented and properly included in the class
         schedule = {}
-        for day in range(1, 8):
+        for day in range(1, 8):  # establishes availability each day of the week
             schedule[day] = {"7:00AM - 1:00PM": "available",
                              "1:00PM - 7:00PM": "available"}
 
         for day in range(1, 8):
-            name_of_day = list(calendar.day_name)  # retrieves name of days
-            print(f"\nAvailability for {name_of_day[day - 1]}")
+            name_of_day = list(calendar.day_name)
+            print(f"\nAvailability for {name_of_day[day - 1]} for {self.name}")
 
-            # gets availability for morning shift
-            morning_shift = input("Morning shift (7:00AM - 1:00PM): Enter 'preferred', 'available', or 'NA': ").strip()
-            if morning_shift in ["available", "preferred", "NA"]:  # Corrected condition
-                schedule[day]["7:00AM - 1:00PM"] = morning_shift
-            else:
-                schedule[day]["7:00AM - 1:00PM"] = "available"
+            # user inputs morning shift availability
+            morning_shift = input(
+                "Morning shift (7:00AM - 1:00PM): Enter 'preferred', 'available', or 'NA': ").strip().lower()
+            while morning_shift not in ["preferred", "available", "na"]:  # input validation added
+                morning_shift = input("Invalid input. Please enter 'preferred', 'available', or 'NA': ").strip().lower()
+            schedule[day]["7:00AM - 1:00PM"] = morning_shift
 
-            # get availability for afternoon shift
-            afternoon_shift = input("Afternoon shift (1:00PM - 7:00PM): Enter 'preferred', 'available', or 'NA': ").strip()
-            if afternoon_shift in ["available", "preferred", "NA"]:  # Corrected condition
-                schedule[day]["1:00PM - 7:00PM"] = afternoon_shift
-            else:
-                schedule[day]["1:00PM - 7:00PM"] = "available"
+            # user inputs afternoon shift availability
+            afternoon_shift = input(
+                "Afternoon shift (1:00PM - 7:00PM): Enter 'preferred', 'available', or 'NA': ").strip().lower()
+            while afternoon_shift not in ["preferred", "available", "na"]:  # input validation added
+                afternoon_shift = input("Invalid input. Please enter 'preferred', 'available', or 'NA': ").strip().lower()
+            schedule[day]["1:00PM - 7:00PM"] = afternoon_shift
 
         return schedule
 
@@ -111,6 +110,7 @@ class Caregiver_Schedule(Caregiver):  # creates attributes for individual caregi
             file.write(html_schedule)
         print(f"Availability schedule generated for {self.name}.")
 
+
 class Generate_Schedule:  # creates schedule for all employees
     def __init__(self, year, month):
         self.year = year
@@ -154,7 +154,6 @@ if __name__ == "__main__":
         {"name": "Frank", "phone number": "123-456-7890", "email": "frank@gmail.com", "payrate": 20},
         {"name": "Grace", "phone number": "123-456-7890", "email": "grace@gmail.com", "payrate": 20},
         {"name": "John", "phone number": "123-456-7890", "email": "john@gmail.com", "payrate": 20}
-
     ]
 
     for details in caregiver_details:
@@ -164,9 +163,23 @@ if __name__ == "__main__":
         caregiver.display_schedule_as_html(availability)
         caregivers.append(caregiver)
 
-    # input the year and month of the schedule
-    year = int(input("\nEnter the year for the schedule: "))
-    month = int(input("Enter the month (1-12): "))
+    # input validation for both year and month
+    while True:
+        try:
+            year = int(input("\nEnter the year for the schedule: "))
+            break
+        except ValueError:
+            print("Invalid. Please enter a number")
+            
+    while True:
+        try:
+            month = int(input("Enter the month (1-12): "))
+            if month < 1 or month > 12: 
+                print("Invalid. Please enter a number between 1 and 12")
+                continue
+            break
+        except ValueError:
+            print("Invalid. Please enter a number")
 
     # generates schedule based on availability
     schedule_generator = Generate_Schedule(year, month)
